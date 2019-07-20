@@ -8,55 +8,67 @@ const HOURS_PER_DAY = 24;
 
 const DUMMY_ENDPOINT = 'http://dummy.restapiexample.com/api/v1/employee';
 const HERE_ENDPOINT = 'https://route.api.here.com/routing/7.2/calculateroute.json';
+// const HERE_ENDPOINT = 'https://route.api.here.com/routing/7.2/calculateroute.json?app_id=267f9NJSwzyCIx6hWBFZ&app_code=sytOu8Ybgls8UHnTlB_GOg&waypoint0=geo!52.5,13.4&waypoint1=geo!52.5,13.45&mode=fastest;car;traffic:disabled';
+
+const addMinutes = function(date, minutes) {
+	return new Date(date.getTime() + minutes * 60000);
+}
 
 const submitQuery = function() {
-	const today = new Date();
-	const curr_hour = today.getHours();
-	const curr_minute = today.getMinutes();
+	const waypoint0 = 'geo!52.5,13.4';
+	const waypoint1 = 'geo!52.5,13.45';
+	const mode = 'fastest;car;traffic:enabled;'
+
+	const now = new Date();
+	const curr_hour = now.getHours();
+	const curr_minute = now.getMinutes();
 	const curr_time = curr_hour * MINS_PER_HOUR + curr_minute;
 
 	const query_deferred = [];
 	const query_data = [];
 
-	console.log(APP_ID);
 	const tot_minutes = MINS_PER_HOUR * HOURS_PER_DAY;
 	for (let i = curr_time; i < tot_minutes; i+=QUERY_FREQ_IN_MIN) {
+		departure = addMinutes(now, i - curr_time).toISOString();
 		const deferred = $.ajax({
-			url: `${DUMMY_ENDPOINT}/${i}`,
+			url: `${HERE_ENDPOINT}`,
+			type: 'GET',
 			data: {
-				// app_id: 
+				app_id: HERE_APP_ID,
+				app_code: HERE_APP_CODE,
+				waypoint0: waypoint0,
+				waypoint1: waypoint1,
+				mode: mode,
+				departure: departure
 			},
 			success: function(result) {
-				console.log("HI");
-				query_data.push([i, result])
+				const data = result['response']['route'];
+				query_data.push([i, data])
+			},
+			error: function(err) {
+				console.log(err);
 			}
-
 		});
+
 		query_deferred.push(deferred)
-		break
 	}
-
-	// for (let i = curr_time; i < tot_minutes; i+=QUERY_FREQ_IN_MIN) {
-	// 	const deferred = $.ajax({
-	// 		url: `${DUMMY_ENDPOINT}/${i}`,
-	// 		data: {
-
-	// 		}
-	// 		success: function(result) {
-	// 			console.log("HI");
-	// 			query_data.push([i, result])
-	// 		}
-
-	// 	});
-	// 	query_deferred.push(deferred)
-	// 	break
-	// }
 
 	$.when.apply($, query_deferred).then(function() {
 		query_data.sort(function(a, b) {
 			return a[0] - b[0]
 		});
-		console.log(query_data)
+		query_data.forEach(element => {
+			console.log(element[1][0]['summary']['text']);
+		})
 	});
 }
+
+
+
+
+
+
+
+
+
 
