@@ -1,5 +1,25 @@
 <html>
   <head>
+    <style>
+        .body {
+          font-family: sans-serif;
+        }
+    
+        .axis {
+          font: 10px sans-serif;
+        }
+      
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+    
+        .bar {
+          fill: steelblue;
+        }
+      </style>
   <meta name="viewport" content="initial-scale=1.0, width=device-width" />
   <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"
   type="text/javascript" charset="utf-8"></script>
@@ -7,6 +27,108 @@
   type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
+    <input type="text" id="startLocation" name="startLocation">
+    <input type="text" id="endLocation" name="endLocation">
+    <button>Submit</button>
+    <br>
+  
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-time.v1.min.js"></script>
+    <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+    <script>
+  
+      var data = [
+        {startTime: "1:00", travelTime: 45},
+        {startTime: "1:30", travelTime: 47},
+        {startTime: "2:00", travelTime: 40},
+        {startTime: "2:30", travelTime: 38},
+        {startTime: "3:00", travelTime: 40},
+        {startTime: "3:30", travelTime: 43},
+        {startTime: "4:00", travelTime: 45},
+        {startTime: "4:30", travelTime: 47},
+        {startTime: "5:00", travelTime: 50},
+        {startTime: "5:30", travelTime: 55},
+        {startTime: "6:00", travelTime: 60},
+        {startTime: "6:30", travelTime: 57},
+        {startTime: "7:00", travelTime: 55},
+        {startTime: "7:30", travelTime: 54},
+        {startTime: "8:00", travelTime: 45},
+        {startTime: "8:30", travelTime: 42},
+        {startTime: "9:00", travelTime: 40},
+  
+      ];
+  
+      // set the dimensions and margins of the graph
+      var margin = {top: 30, right: 20, bottom: 70, left: 60},
+        width = 800 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+  
+      // set the ranges
+      var x = d3.scaleBand()
+                .range([0, width])
+                .paddingInner(0.1);
+      var y = d3.scaleLinear()
+                .range([height, 0]);
+  
+      // append the svg object to the body of the page
+      // append a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var svg = d3.select("body").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", 
+                "translate(" + margin.left + "," + margin.top + ")");
+    
+      // format the data
+      data.forEach(function(d) {
+        d.travelTime = +d.travelTime;
+      });
+  
+      // Scale the range of the data in the domains
+      x.domain(data.map(function(d) { return d.startTime; }));
+      y.domain([0, d3.max(data, function(d) { return d.travelTime; })]);
+  
+      // append the rectangles for the bar chart
+      svg.selectAll(".bar")
+          .data(data)
+        .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) {
+            return x(d.startTime);
+          })
+          .attr("width", x.bandwidth())
+          .attr("y", function(d) { return y(d.travelTime); })
+          .attr("height", function(d) { return height - y(d.travelTime); });
+  
+      // add the x Axis
+      svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+  
+        // text label for the x axis
+      svg.append("text")             
+        .attr("transform",
+              "translate(" + (width/2) + " ," + 
+                              (height + margin.top + 20) + ")")
+        .style("text-anchor", "middle")
+        .text("Time of Day");
+  
+      // add the y Axis
+      svg.append("g")
+          .call(d3.axisLeft(y));
+  
+    // text label for the y axis
+      svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Travel Time (minutes)");  
+    
+    </script>
+
   <div style="width: 640px; height: 480px" id="mapContainer"></div>
   <script>
     // Initialize the platform object:
