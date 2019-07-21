@@ -1,4 +1,3 @@
-<<<<<<< HEAD:requests.js
 $(document).ready(function() {
 
 	$('#queryBtn').on('click', submitQuery);
@@ -7,14 +6,6 @@ $(document).ready(function() {
 
 	
 });
-=======
-// $(document).ready(function() {
-// 	$('#queryBtn').on('click', submitQuery);
-// });
-
-const HERE_APP_ID='267f9NJSwzyCIx6hWBFZ';
-const HERE_APP_CODE='sytOu8Ybgls8UHnTlB_GOg';
->>>>>>> 367d50072875cfb4765b56d8702ce70a3d287d0f:reactapp/public/requests.js
 
 const QUERY_FREQ_IN_MIN = 30;
 const MINS_PER_HOUR = 60;
@@ -28,8 +19,7 @@ const addMinutes = function(date, minutes) {
 	return new Date(date.getTime() + minutes * 60000);
 }
 
-function submitQuery() {
-  console.log("inside submitQuery")
+const submitQuery = function() {
 	const waypoint0 = 'geo!52.5,13.4';
 	const waypoint1 = 'geo!52.5,13.45';
 	const mode = 'fastest;car;traffic:enabled;'
@@ -71,7 +61,6 @@ function submitQuery() {
 	$.when.apply($, query_deferred).then(function() {
 		query_data.sort(function(a, b) {
 			return a[0] - b[0]
-<<<<<<< HEAD:requests.js
 		});
 		// query_data.forEach(element => {
 		// 	// console.log(element)
@@ -97,19 +86,9 @@ function submitQuery() {
 
 		var shortestRoute = validRoutes.reduce(function (shortest, route) {
 			return (route[1][0].summary.trafficTime || 0) < shortest[1][0].summary.trafficTime ? route: shortest;
-		  }, [null,[{summary:{trafficTime:10000}}]]);
+		  }, [null,[{summary:{trafficTime:Infinity}}]]);
 
-		
-	
-
-
-=======
-    });
-    console.log(query_data);
-		// query_data.forEach(element => {
-		// 	console.log(element[1][0]['summary']['text']);
-		// })
->>>>>>> 367d50072875cfb4765b56d8702ce70a3d287d0f:reactapp/public/requests.js
+		console.log(shortestRoute);
 	});
 
 
