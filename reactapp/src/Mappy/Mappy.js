@@ -16,17 +16,14 @@ class Mappy extends React.Component {
 
     script.src = filepath;
     document.body.appendChild(script);
+
+    script.onload = (function () {
+      this.setState({ isLoading: false })
+    }).bind(this)
   }
 
   componentDidMount() {
-    new Promise( (resolve, reject) => {
-      this.attachScript("./helper.js");
-      resolve();
-    }).then( () => {
-      this.attachScript("./helper_after.js");
-    }).then( () => {
-      this.setState({ isLoading: false });
-    })
+    this.attachScript('./helper.js');
   }
 
   render() {
