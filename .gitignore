@@ -1,3 +1,5 @@
 .DS_Store
 secret.js
 reactapp/src/api_key_secret.js
+
+node_modules/

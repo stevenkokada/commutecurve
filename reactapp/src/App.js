@@ -3,6 +3,7 @@ import CanvasJSReact from './canvasjs.react';
 import GoogleSuggest from './PlaceAutocomplete'
 import Mappy from './Mappy/Mappy.js';
 import axios from 'axios';
+import Moment from 'moment';
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -16,25 +17,7 @@ class App extends React.Component {
       isLoading: true,
       startLocation: undefined,
       endLocation: undefined,
-      data: [
-        {label: "1:00", y: 45},
-        {label: "1:30", y: 47},
-        {label: "2:00", y: 40},
-        {label: "2:30", y: 38},
-        {label: "3:00", y: 40},
-        {label: "3:30", y: 43},
-        {label: "4:00", y: 45},
-        {label: "4:30", y: 47},
-        {label: "5:00", y: 50},
-        {label: "5:30", y: 55},
-        {label: "6:00", y: 60},
-        {label: "6:30", y: 57},
-        {label: "7:00", y: 55},
-        {label: "7:30", y: 54},
-        {label: "8:00", y: 45},
-        {label: "8:30", y: 42},
-        {label: "9:00", y: 40},
-      ],
+      data: undefined,
       timezoneOffset: new Date().getTimezoneOffset() / 60,
       tolerance: undefined,
       errorMessage: ''
@@ -101,7 +84,25 @@ class App extends React.Component {
         }
       })
       .then(response => {
-        console.log(response.data);
+        console.log(response.data.query_data);
+        const rawDataArray = response.data.query_data;
+
+        let data = [];
+
+        rawDataArray.forEach((datum) => {
+          var timeString = Moment(datum.label).format('LT');
+          var value = datum.y;
+
+          data.push({label: timeString, y: value});
+        });
+
+        console.log(data);
+
+        this.setState(() => {
+          return {
+            data,
+          };
+        });
       })
       .catch(error => {
         console.log(error);
@@ -124,7 +125,7 @@ class App extends React.Component {
       data: [
         {
           // Change type to "doughnut", "line", "splineArea", etc.
-          type: "column",
+          type: "line",
           dataPoints: this.state.data
         }
       ],
@@ -144,15 +145,18 @@ class App extends React.Component {
           End Location: <GoogleSuggest
             passUpLocation={this.setEndLocation}
           />
-          Desired Departure Time: <input type="time" ref={this.desiredTime} ></input>
-          Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance}></input>
+          Desired Departure Time: <input type="time" ref={this.desiredTime} value="13:00" ></input>
+          Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance} value="123"></input>
           <button>Submit</button>
         </form>
 
         <Mappy />
-        <CanvasJSChart options={options}
+        {
+          this.state.data && 
+          <CanvasJSChart options={options}
           onRef={ref => this.chart = ref}
         />
+        }
       </div>
     )
   }
