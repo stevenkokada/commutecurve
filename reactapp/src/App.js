@@ -25,21 +25,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // fetch('http://ec2-18-217-197-235.us-east-2.compute.amazonaws.com:8000/histogram')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     data.forEach((datum) => {
-    //       console.log(datum.label);
-    //       var d = new Date(datum.label);
-    //       console.log(d);
-    //     });
-        
-    //     this.setState({
-    //       data,
-    //     })
-    //   });
-
     const script = document.createElement("script");
     script.src = "./requests.js";
     script.onload = (function () {
@@ -84,9 +69,7 @@ class App extends React.Component {
         }
       })
       .then(response => {
-        console.log(response.data.query_data);
         const rawDataArray = response.data.query_data;
-
         let data = [];
 
         rawDataArray.forEach((datum) => {
@@ -95,8 +78,6 @@ class App extends React.Component {
 
           data.push({label: timeString, y: value});
         });
-
-        console.log(data);
 
         this.setState(() => {
           return {
