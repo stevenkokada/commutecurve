@@ -1,9 +1,11 @@
 $(document).ready(function() {
-    // $('#geocode').on("click", forwardGeocode);
 
     $('#geocode').on("submit", forwardGeocode);
 
 });
+
+
+
 
 const forwardGeocode = function(event){
     event.preventDefault();

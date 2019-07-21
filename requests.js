@@ -1,5 +1,10 @@
 $(document).ready(function() {
+
 	$('#queryBtn').on('click', submitQuery);
+
+	
+
+	
 });
 
 const QUERY_FREQ_IN_MIN = 30;
@@ -57,11 +62,51 @@ const submitQuery = function() {
 		query_data.sort(function(a, b) {
 			return a[0] - b[0]
 		});
-		query_data.forEach(element => {
-			console.log(element[1][0]['summary']['text']);
-		})
+		// query_data.forEach(element => {
+		// 	// console.log(element)
+		// 	// console.log(element[0])
+		// 	// console.log(element[1][0]['summary']['text']);
+		// });
+
+
+		// optimal time calculation
+
+		const timeSplit = $("#desiredDeparture").val().split(':');
+		const hours = parseInt(timeSplit[0], 10);
+		const minutes = parseInt(timeSplit[1], 10);
+		const tolerance = parseInt($("#tolerance").val(), 10);
+	
+		const minuteIndex = hours*60 + minutes;
+	
+	
+
+		const validRoutes = query_data.filter(elt => elt[0] > minuteIndex - tolerance && elt[0] < minuteIndex + tolerance);
+
+		validRoutes.forEach(elt => console.log(elt[1][0].summary.trafficTime))
+
+		var shortestRoute = validRoutes.reduce(function (shortest, route) {
+			return (route[1][0].summary.trafficTime || 0) < shortest[1][0].summary.trafficTime ? route: shortest;
+		  }, [null,[{summary:{trafficTime:10000}}]]);
+
+		
+	
+
+
 	});
+
+
+	
+		
+	
+	
+	
+		
 }
+
+
+
+
+
 
 
 
