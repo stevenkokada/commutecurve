@@ -1,6 +1,8 @@
 .inputSection {
     display: inline-block;
-    width: 30vw;
+    width: 40vw;
+    height: 60vh;
+    overflow: auto;
 }
 
 .form {
@@ -49,7 +51,7 @@
 
 .recommendations {
     padding: 0px 20px;
-    font-weight: 100 !important;
+    color: rgb(58, 0, 0);
 }
 
 .formtwo {
