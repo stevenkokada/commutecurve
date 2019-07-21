@@ -1,3 +1,7 @@
+* {
+  font-family: sans-serif;
+}
+
 .inputSection {
     display: inline-block;
     width: 40vw;
@@ -6,6 +10,7 @@
 }
 
 .form {
+    font-family: sans-serif;
     padding: 20px;
     display: inline-block;
     width: 30vw;

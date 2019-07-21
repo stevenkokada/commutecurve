@@ -30,6 +30,8 @@ class App extends React.Component {
       rawData: null,
       extraInputsStyle: {visibility: ''},
       formtwoStyle: {visibility: 'hidden'},
+      formattedEarliest: undefined,
+      formattedLatest: undefined,
     }
   }
 
@@ -100,6 +102,8 @@ class App extends React.Component {
       return {
         optimalTime,
         optimalTravelLength: bestEntry.y,
+        formattedEarliest: earliestMoment,
+        formattedLatest: latestMoment,
       }
     });
   }
@@ -154,7 +158,14 @@ class App extends React.Component {
   render() {
     const options = {
       title: {
-        text: 'Commute Time'
+        text: 'Commute Time',
+        fontFamily: 'sans-serif',
+      },
+      axisX: {
+        title: 'Time of Day'
+      },
+      axisY: {
+        title: 'Commute Time (minutes)'
       },
       colorSet: 'blue',
       data: [
@@ -196,7 +207,7 @@ class App extends React.Component {
           <button onClick={this.calculateOptimalTime}>Submit</button>
         </form>
         { this.state.optimalTime && <div className="recommendations">
-          <p>{`If you want to leave between ${this.earliestTime.current.value} and ${this.latestTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
+          <p>{`If you want to leave between ${this.state.formattedEarliest.format('LT')} and ${this.state.formattedLatest.format('LT')}, you should head out at ${this.state.optimalTime} for a travel length of ${Math.round(this.state.optimalTravelLength)} minutes.`}</p>
         </div>}
         </div>
 
