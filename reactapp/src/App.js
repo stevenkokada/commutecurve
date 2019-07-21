@@ -72,8 +72,8 @@ class App extends React.Component {
     const earliestDate = this.timeToDateObj(this.earliestTime.current.value);
     const latestDate = this.timeToDateObj(this.latestTime.current.value);
   
-    const earliestMoment = Moment(earliestDate).add(5, 'days');
-    let latestMoment = Moment(latestDate).add(5, 'days');
+    const earliestMoment = Moment(earliestDate).add(4, 'days');
+    let latestMoment = Moment(latestDate).add(4, 'days');
 
     // Account for things that go past midnight
 
