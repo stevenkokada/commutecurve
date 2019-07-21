@@ -1,11 +1,16 @@
 
-#map {
-    width: 95%;
-    height: 450px;
-    background: grey;
+#mapContainer {
+    width: 70vw;
+    height: 300px;
+    padding: 20px;
+    display: inline-block;
 }
 
 #panel {
-    width: 100%;
-    height: 400px;
+    display: inline-block;
+    width: 20vw;
+    height: 300px;
+    overflow: auto;
+    margin: 0px 20px;
 }
+

@@ -16,3 +16,7 @@
 .bar {
   fill: steelblue;
 }
+
+.body * {
+  box-sizing: border-box;
+}

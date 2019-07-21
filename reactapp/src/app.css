@@ -1,0 +1,30 @@
+.form {
+    padding: 20px;
+    display: inline-block;
+    width: 30vw;
+    vertical-align: top;
+}
+
+.form .bpzdHV {
+    display: inline-block;
+    width: 150px !important;
+}
+
+.form > * {
+    margin: 10px 0px;
+}
+
+.form button {
+    background-color: rgb(200, 255, 200);
+    height: 40px;
+    width: 80px;
+}
+
+.canvasjs-chart-canvas {
+    /* width: 60vw !important; */
+}
+
+#canvasjs-react-chart-container-0 {
+    display: inline-block;
+    width: inherit !important;
+}

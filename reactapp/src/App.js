@@ -5,6 +5,8 @@ import Mappy from './Mappy/Mappy.js';
 import axios from 'axios';
 import Moment from 'moment';
 
+import './app.css';
+
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class App extends React.Component {
@@ -25,6 +27,7 @@ class App extends React.Component {
       waypoint0: null,
       waypoint1: null,
       route: null,
+      extraInputsStyle: {visibility: ''},
     }
   }
 
@@ -56,6 +59,7 @@ class App extends React.Component {
   submitData = (e) => {
     e.preventDefault();
     if(this.state.startLocation && this.state.endLocation && this.desiredTime.current.value && this.tolerance.current.value) {
+      console.log("starting send axios GET request to ec2/histogram")
       axios.get('http://ec2-18-217-197-235.us-east-2.compute.amazonaws.com:8000/histogram', {
         params: {
           startLocation: this.state.startLocation.formatted_address,
@@ -117,33 +121,48 @@ class App extends React.Component {
         }
       ],
       dataPointWidth: 30,
+      width: 700,
+      height: 300,
     }
 
     return (
       <div>
         {this.state.error && <p>{this.state.error}</p>}
-        <form >
+        <form className="form">
           Start Location: <GoogleSuggest
             passUpLocation={this.setStartLocation}
           />
+          <br/>
           End Location: <GoogleSuggest
             passUpLocation={this.setEndLocation}
           />
-          Desired Departure Time: <input type="time" ref={this.desiredTime}></input>
-          Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance}></input>
-          <button onClick={this.submitData}>Submit</button>
+
+          <button onClick={this.submitData} style={{display: 'block'}}>Submit</button>
+
+          <div className="extraInputs" style={this.state.extraInputsStyle}>
+            Desired Departure Time: <input type="time" ref={this.desiredTime} defaultValue={"09:00"}></input>
+          </div>
+          <div className="extraInputs" style={this.state.extraInputsStyle}>
+            Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance} value={100}></input>
+          </div>
         </form>
         { this.state.optimalTime && <div>
           <p>{`If you want to leave within ${this.tolerance.current.value} minutes of ${this.desiredTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
         </div>}
 
-        <Mappy route={this.state.route}/>
+
+
+          {/* CHART */}
         {
           this.state.data && 
           <CanvasJSChart options={options}
           onRef={ref => this.chart = ref}
         />
         }
+
+          {/* MAP */}
+        <Mappy route={this.state.route}/>
+        
       </div>
     )
   }
