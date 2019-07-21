@@ -83,7 +83,7 @@ class App extends React.Component {
           };
         });
 
-        this.setState({waypoint0: response.data.waypoint0, waypoint1: response.data.waypoint1, route: response.data.query_data[0]["route"]});
+        this.setState({waypoint0: response.data.waypoint0, waypoint1: response.data.waypoint1, route: response.data.query_data[0]["route"][0]});
 
         console.log(this.state);
       })

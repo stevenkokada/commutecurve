@@ -37,6 +37,9 @@ function calculateRouteFromAtoB (platform) {
  */
 function showRoute(route) {
   // var route = result.response.route[0];
+  // console.log(result);
+  console.log('route');
+  console.log(route);
  /*
   * The styling of the route response on the map is entirely under the developer's control.
   * A representitive styling can be found the full JS + HTML code of this example
