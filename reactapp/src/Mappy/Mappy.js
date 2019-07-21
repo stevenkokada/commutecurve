@@ -31,7 +31,7 @@ class Mappy extends React.Component {
       window.showRoute(this.props.route);
     }
     return (
-      <div>
+      <div style={{display: 'inline-block'}}>
         <div id="mapContainer"></div>
         <div id="panel"></div>
         {this.state.isLoading ?

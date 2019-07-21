@@ -106,6 +106,7 @@ class App extends React.Component {
   submitData = (e) => {
     e.preventDefault();
     if(this.state.startLocation && this.state.endLocation) {
+      console.log("axios GET request submtting to ec2");
       axios.get('http://ec2-18-217-197-235.us-east-2.compute.amazonaws.com:8000/histogram', {
         params: {
           startLocation: this.state.startLocation.formatted_address,
@@ -160,12 +161,13 @@ class App extends React.Component {
         }
       ],
       dataPointWidth: 30,
-      width: window.innerWidth * 0.5,
-      height: window.innerHeight * 0.4,
+      width: window.innerWidth * 0.9,
+      height: window.innerHeight * 0.3,
     }
 
     return (
       <div>
+        <div className="inputSection">
         {this.state.error && <p>{this.state.error}</p>}
         <div className="title"> Commute Curve </div>
         <form className="form">
@@ -180,25 +182,36 @@ class App extends React.Component {
           />
           <button onClick={this.submitData} style={{display: 'block'}}>Submit</button>
         </form>
-        <form>
-          Earliest Desired Departure Time: <input type="time" ref={this.earliestTime}></input>
-          Latest Desired Departure Time: <input type="time" min="0" ref={this.latestTime}></input>
+        <form className="formtwo">
+          <div>
+            Earliest Desired Departure Time: <input type="time" ref={this.earliestTime}></input>
+          </div>
+          <div>
+            Latest Desired Departure Time: <input type="time" min="0" ref={this.latestTime}></input>
+          </div>
           <button onClick={this.calculateOptimalTime}>Submit</button>
         </form>
         { this.state.optimalTime && <div>
           <p>{`If you want to leave between ${this.earliestTime.current.value} and ${this.latestTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
         </div>}
+        </div>
 
-          {/* CHART */}
+        {/* MAP */}
+        <Mappy route={this.state.route}/>
+
+        <br/>
+
+        {/* CHART */}
         {
           this.state.data && 
-          <CanvasJSChart options={options}
-          onRef={ref => this.chart = ref}
-        />
+          <div className="chartOuterContainer">
+            <div className="chartInnerContainer">
+              <CanvasJSChart options={options}
+              onRef={ref => this.chart = ref}
+              />
+            </div>
+          </div>
         }
-
-          {/* MAP */}
-        <Mappy route={this.state.route}/>
         
       </div>
     )

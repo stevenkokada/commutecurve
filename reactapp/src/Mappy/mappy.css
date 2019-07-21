@@ -1,6 +1,6 @@
 
 #mapContainer {
-    width: 70vw;
+    width: 30vw;
     height: 300px;
     padding: 20px;
     display: inline-block;
@@ -8,7 +8,7 @@
 
 #panel {
     display: inline-block;
-    width: 20vw;
+    width: 25vw;
     height: 300px;
     overflow: auto;
     margin: 0px 20px;
