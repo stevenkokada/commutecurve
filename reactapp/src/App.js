@@ -191,7 +191,7 @@ class App extends React.Component {
           </div>
           <button onClick={this.calculateOptimalTime}>Submit</button>
         </form>
-        { this.state.optimalTime && <div>
+        { this.state.optimalTime && <div className="recommendations">
           <p>{`If you want to leave between ${this.earliestTime.current.value} and ${this.latestTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
         </div>}
         </div>
