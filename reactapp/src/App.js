@@ -19,7 +19,9 @@ class App extends React.Component {
       data: undefined,
       timezoneOffset: new Date().getTimezoneOffset() / 60,
       tolerance: undefined,
-      errorMessage: ''
+      errorMessage: '',
+      optimalTime: undefined,
+      optimalTravelLength: undefined,
     }
   }
 
@@ -72,8 +74,11 @@ class App extends React.Component {
           data.push({label: timeString, y: value});
         });
 
+        console.log(response.data.shortestRoute);
+
         this.setState(() => {
           return {
+            error: '',
             data,
           };
         });
@@ -120,7 +125,9 @@ class App extends React.Component {
           Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance}></input>
           <button>Submit</button>
         </form>
-
+        { this.state.optimalTime && <div>
+          <p>{`If you want to leave within ${this.tolerance.current.value} minutes of ${this.desiredTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
+        </div>}
         <Mappy />
         {
           this.state.data && 
