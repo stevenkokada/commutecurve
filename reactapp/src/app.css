@@ -48,5 +48,20 @@
 }
 
 .recommendations {
+    padding: 0px 20px;
+    font-weight: 100 !important;
+}
 
+.formtwo {
+    padding: 0px 20px;
+}
+
+.formtwo > * {
+    margin: 5px 0px;
+}
+
+.formtwo button {
+    height: 30px;
+    width: 100px;
+    background-color: rgb(199, 228, 255); 
 }

@@ -29,6 +29,7 @@ class App extends React.Component {
       route: null,
       rawData: null,
       extraInputsStyle: {visibility: ''},
+      formtwoStyle: {visibility: 'hidden'},
     }
   }
 
@@ -104,6 +105,9 @@ class App extends React.Component {
   }
 
   submitData = (e) => {
+    this.setState({
+      formtwoStyle: {visibility: ''}
+    })
     e.preventDefault();
     if(this.state.startLocation && this.state.endLocation) {
       console.log("axios GET request submtting to ec2");
@@ -182,7 +186,7 @@ class App extends React.Component {
           />
           <button onClick={this.submitData} style={{display: 'block'}}>Submit</button>
         </form>
-        <form className="formtwo">
+        <form className="formtwo" style={this.state.formtwoStyle}>
           <div>
             Earliest Desired Departure Time: <input type="time" ref={this.earliestTime}></input>
           </div>
