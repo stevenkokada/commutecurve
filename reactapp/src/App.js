@@ -11,8 +11,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.desiredTime = React.createRef();
-    this.tolerance = React.createRef();
+    this.earliestTime = React.createRef();
+    this.latestTime = React.createRef();
     this.state = {
       startLocation: undefined,
       endLocation: undefined,
@@ -25,6 +25,7 @@ class App extends React.Component {
       waypoint0: null,
       waypoint1: null,
       route: null,
+      rawData: null,
     }
   }
 
@@ -53,23 +54,65 @@ class App extends React.Component {
     })
   }
 
+  timeToDateObj = (hoursandMinutes) => {
+    const timeSplit = hoursandMinutes.split(':');
+    const hours = parseInt(timeSplit[0]) % 24;
+    const minutes = parseInt(timeSplit[1]);
+
+    const currentTime = new Date();
+    return new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), hours, minutes, 0, 0);
+  }
+
+  calculateOptimalTime = (e) => {
+    e.preventDefault();
+
+    const earliestDate = this.timeToDateObj(this.earliestTime.current.value);
+    const latestDate = this.timeToDateObj(this.latestTime.current.value);
+  
+    const earliestMoment = Moment(earliestDate).add(5, 'days');
+    let latestMoment = Moment(latestDate).add(5, 'days');
+
+    // Account for things that go past midnight
+
+    if (latestMoment.isBefore(earliestMoment)) {
+      latestMoment.add(1, 'day');
+    }
+
+    const validRoutes = this.state.rawData.filter((datum) => {
+      const tempMoment = Moment(new Date(datum.label));
+      return tempMoment.isBetween(earliestMoment, latestMoment, 'minute', '[]');
+    });
+
+    let bestEntry = validRoutes[0];
+    validRoutes.forEach((elt) => {
+      if (elt.y < bestEntry.y){
+        bestEntry = elt;
+      }
+    });
+
+    const optimalTime = Moment(new Date(bestEntry.label)).format('LT');
+
+    this.setState(() => {
+      return {
+        optimalTime,
+        optimalTravelLength: bestEntry.y,
+      }
+    });
+  }
+
   submitData = (e) => {
     e.preventDefault();
-    if(this.state.startLocation && this.state.endLocation && this.desiredTime.current.value && this.tolerance.current.value) {
+    if(this.state.startLocation && this.state.endLocation) {
       axios.get('http://ec2-18-217-197-235.us-east-2.compute.amazonaws.com:8000/histogram', {
         params: {
           startLocation: this.state.startLocation.formatted_address,
           endLocation: this.state.endLocation.formatted_address,
           timeOffset: this.state.timezoneOffset,
-          desiredTime: this.desiredTime.current.value,
-          tolerance: this.tolerance.current.value,
         }
       })
       .then(response => {
         const rawDataArray = response.data.query_data;
         let data = [];
-        console.log("response: ");
-        console.log(response);
 
         rawDataArray.forEach((datum) => {
           var timeString = Moment(datum.label).format('LT');
@@ -78,18 +121,15 @@ class App extends React.Component {
           data.push({label: timeString, y: value});
         });
 
-        console.log(response.data.shortestRoute);
-
         this.setState(() => {
           return {
             error: '',
             data,
+            rawData: rawDataArray,
           };
         });
 
         this.setState({waypoint0: response.data.waypoint0, waypoint1: response.data.waypoint1, route: response.data.query_data[0]["route"][0]});
-
-        console.log(this.state);
       })
       .catch(error => {
         console.log(error);
@@ -122,19 +162,22 @@ class App extends React.Component {
     return (
       <div>
         {this.state.error && <p>{this.state.error}</p>}
-        <form onSubmit={this.submitData}>
+        <form>
           Start Location: <GoogleSuggest
             passUpLocation={this.setStartLocation}
           />
           End Location: <GoogleSuggest
             passUpLocation={this.setEndLocation}
           />
-          Desired Departure Time: <input type="time" ref={this.desiredTime}></input>
-          Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance}></input>
-          <button>Submit</button>
+          <button onClick={this.submitData}>Submit</button>
+        </form>
+        <form>
+          Earliest Desired Departure Time: <input type="time" ref={this.earliestTime}></input>
+          Latest Desired Departure Time: <input type="time" min="0" ref={this.latestTime}></input>
+          <button onClick={this.calculateOptimalTime}>Submit</button>
         </form>
         { this.state.optimalTime && <div>
-          <p>{`If you want to leave within ${this.tolerance.current.value} minutes of ${this.desiredTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
+          <p>{`If you want to leave between ${this.earliestTime.current.value} and ${this.latestTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
         </div>}
 
         <Mappy route={this.state.route}/>
