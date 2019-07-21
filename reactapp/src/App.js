@@ -20,7 +20,10 @@ class App extends React.Component {
       data: undefined,
       timezoneOffset: new Date().getTimezoneOffset() / 60,
       tolerance: undefined,
-      errorMessage: ''
+      errorMessage: '',
+      waypoint0: null,
+      waypoint1: null,
+      route: null,
     }
   }
 
@@ -71,6 +74,8 @@ class App extends React.Component {
       .then(response => {
         const rawDataArray = response.data.query_data;
         let data = [];
+        console.log("response: ");
+        console.log(response);
 
         rawDataArray.forEach((datum) => {
           var timeString = Moment(datum.label).format('LT');
@@ -84,6 +89,10 @@ class App extends React.Component {
             data,
           };
         });
+
+        this.setState({waypoint0: response.data.waypoint0, waypoint1: response.data.waypoint1, route: response.data.query_data[0]["route"]});
+
+        console.log(this.state);
       })
       .catch(error => {
         console.log(error);
@@ -131,7 +140,8 @@ class App extends React.Component {
           <button>Submit</button>
         </form>
 
-        <Mappy />
+        <Mappy route={this.state.route}/>
+
         {
           this.state.data && 
           <CanvasJSChart options={options}

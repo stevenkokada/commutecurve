@@ -28,14 +28,15 @@ function calculateRouteFromAtoB (platform) {
     onError
   );
 }
+
 /**
  * This function will be called once the Routing REST API provides a response
  * @param  {Object} result          A JSONP object representing the calculated route
  *
  * see: http://developer.here.com/rest-apis/documentation/routing/topics/resource-type-calculate-route.html
  */
-function onSuccess(result) {
-  var route = result.response.route[0];
+function showRoute(route) {
+  // var route = result.response.route[0];
  /*
   * The styling of the route response on the map is entirely under the developer's control.
   * A representitive styling can be found the full JS + HTML code of this example
@@ -271,4 +272,4 @@ Number.prototype.toMMSS = function () {
 }
 
 // Now use the map as required...
-calculateRouteFromAtoB (platform);                  
+// calculateRouteFromAtoB (platform);                  

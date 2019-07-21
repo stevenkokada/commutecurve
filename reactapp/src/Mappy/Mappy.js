@@ -27,6 +27,9 @@ class Mappy extends React.Component {
   }
 
   render() {
+    if (!this.state.isLoading && this.props.route) {
+      window.showRoute(this.props.route);
+    }
     return (
       <div>
         <div style={{ width: '640px', height: '480px' }} id="mapContainer"></div>
