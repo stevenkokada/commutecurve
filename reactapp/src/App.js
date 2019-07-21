@@ -121,8 +121,8 @@ class App extends React.Component {
         }
       ],
       dataPointWidth: 30,
-      width: 700,
-      height: 300,
+      width: window.innerWidth * (2/3),
+      height: window.innerHeight / 2,
     }
 
     return (
@@ -131,10 +131,12 @@ class App extends React.Component {
         <form className="form">
           Start Location: <GoogleSuggest
             passUpLocation={this.setStartLocation}
+            initialValue={"345 Spear St, San Francisco, CA 94105, USA"}
           />
           <br/>
           End Location: <GoogleSuggest
             passUpLocation={this.setEndLocation}
+            initialValue={"415 Mission St, San Francisco, CA 94105, USA"}
           />
 
           <button onClick={this.submitData} style={{display: 'block'}}>Submit</button>

@@ -4,9 +4,20 @@ import GooglePlacesSuggest from "react-google-places-suggest"
 import MY_API_KEY from "./api_key_secret"
 
 export default class  extends React.Component {
-    state = {
-        search: "",
-        value: "",
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            search: "",
+            value: "",
+        }
+    }
+
+    componentDidMount() {
+        this.setState({value: this.props.initialValue});
+        console.log(this.props.initialValue);
+        console.log(this.state);
     }
  
     handleInputChange = e => {
