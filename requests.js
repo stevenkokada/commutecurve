@@ -86,12 +86,9 @@ const submitQuery = function() {
 
 		var shortestRoute = validRoutes.reduce(function (shortest, route) {
 			return (route[1][0].summary.trafficTime || 0) < shortest[1][0].summary.trafficTime ? route: shortest;
-		  }, [null,[{summary:{trafficTime:10000}}]]);
+		  }, [null,[{summary:{trafficTime:Infinity}}]]);
 
-		
-	
-
-
+		console.log(shortestRoute);
 	});
 
 
