@@ -45,6 +45,8 @@ function showRoute(route) {
   * A representitive styling can be found the full JS + HTML code of this example
   * in the functions below:
   */
+  map.removeObjects(map.getObjects ())
+
   addRouteShapeToMap(route);
   addManueversToMap(route);
 

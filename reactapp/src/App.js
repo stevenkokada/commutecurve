@@ -5,6 +5,8 @@ import Mappy from './Mappy/Mappy.js';
 import axios from 'axios';
 import Moment from 'moment';
 
+import './app.css';
+
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class App extends React.Component {
@@ -26,6 +28,7 @@ class App extends React.Component {
       waypoint1: null,
       route: null,
       rawData: null,
+      extraInputsStyle: {visibility: ''},
     }
   }
 
@@ -157,19 +160,25 @@ class App extends React.Component {
         }
       ],
       dataPointWidth: 30,
+      width: window.innerWidth * 0.5,
+      height: window.innerHeight * 0.4,
     }
 
     return (
       <div>
         {this.state.error && <p>{this.state.error}</p>}
-        <form>
-          Start Location: <GoogleSuggest
+        <div className="title"> Commute Curve </div>
+        <form className="form">
+          Start Location <GoogleSuggest
             passUpLocation={this.setStartLocation}
+            initialValue={"345 Spear St, San Francisco, CA 94105, USA"}
           />
-          End Location: <GoogleSuggest
+          <br/>
+          End Location <GoogleSuggest
             passUpLocation={this.setEndLocation}
+            initialValue={"415 Mission St, San Francisco, CA 94105, USA"}
           />
-          <button onClick={this.submitData}>Submit</button>
+          <button onClick={this.submitData} style={{display: 'block'}}>Submit</button>
         </form>
         <form>
           Earliest Desired Departure Time: <input type="time" ref={this.earliestTime}></input>
@@ -180,13 +189,17 @@ class App extends React.Component {
           <p>{`If you want to leave between ${this.earliestTime.current.value} and ${this.latestTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
         </div>}
 
-        <Mappy route={this.state.route}/>
+          {/* CHART */}
         {
           this.state.data && 
           <CanvasJSChart options={options}
           onRef={ref => this.chart = ref}
         />
         }
+
+          {/* MAP */}
+        <Mappy route={this.state.route}/>
+        
       </div>
     )
   }

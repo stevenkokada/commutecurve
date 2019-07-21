@@ -4,9 +4,14 @@ import GooglePlacesSuggest from "react-google-places-suggest"
 import MY_API_KEY from "./api_key_secret"
 
 export default class  extends React.Component {
-    state = {
-        search: "",
-        value: "",
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            search: "",
+            value: "",
+        }
     }
  
     handleInputChange = e => {
@@ -16,6 +21,7 @@ export default class  extends React.Component {
     handleSelectSuggest = (geocodedPrediction, originalPrediction) => {
         this.setState({search: "", value: geocodedPrediction.formatted_address})
         this.props.passUpLocation(geocodedPrediction);
+        console.log(geocodedPrediction);
     }
     
     handleNoResult = () => {
