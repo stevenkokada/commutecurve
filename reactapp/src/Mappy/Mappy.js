@@ -30,12 +30,11 @@ class Mappy extends React.Component {
     return (
       <div>
         <div style={{ width: '640px', height: '480px' }} id="mapContainer"></div>
+        <div id="panel"></div>
         {this.state.isLoading ?
           "Loading..."
           :
           <div>
-            <button onClick={window.addMarkersToMap(window.map)}>
-            </button>
           </div>
         }
 
