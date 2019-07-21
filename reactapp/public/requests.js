@@ -1,6 +1,9 @@
-$(document).ready(function() {
-	$('#queryBtn').on('click', submitQuery);
-});
+// $(document).ready(function() {
+// 	$('#queryBtn').on('click', submitQuery);
+// });
+
+const HERE_APP_ID='267f9NJSwzyCIx6hWBFZ';
+const HERE_APP_CODE='sytOu8Ybgls8UHnTlB_GOg';
 
 const QUERY_FREQ_IN_MIN = 30;
 const MINS_PER_HOUR = 60;
@@ -14,7 +17,8 @@ const addMinutes = function(date, minutes) {
 	return new Date(date.getTime() + minutes * 60000);
 }
 
-const submitQuery = function() {
+function submitQuery() {
+  console.log("inside submitQuery")
 	const waypoint0 = 'geo!52.5,13.4';
 	const waypoint1 = 'geo!52.5,13.45';
 	const mode = 'fastest;car;traffic:enabled;'
@@ -56,10 +60,11 @@ const submitQuery = function() {
 	$.when.apply($, query_deferred).then(function() {
 		query_data.sort(function(a, b) {
 			return a[0] - b[0]
-		});
-		query_data.forEach(element => {
-			console.log(element[1][0]['summary']['text']);
-		})
+    });
+    console.log(query_data);
+		// query_data.forEach(element => {
+		// 	console.log(element[1][0]['summary']['text']);
+		// })
 	});
 }
 
