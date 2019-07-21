@@ -22,6 +22,9 @@ class App extends React.Component {
       errorMessage: '',
       optimalTime: undefined,
       optimalTravelLength: undefined,
+      waypoint0: null,
+      waypoint1: null,
+      route: null,
     }
   }
 
@@ -52,8 +55,7 @@ class App extends React.Component {
 
   submitData = (e) => {
     e.preventDefault();
-
-    if(this.state.startLocation && this.state.endLocation && this.desiredTime && this.tolerance) {
+    if(this.state.startLocation && this.state.endLocation && this.desiredTime.current.value && this.tolerance.current.value) {
       axios.get('http://ec2-18-217-197-235.us-east-2.compute.amazonaws.com:8000/histogram', {
         params: {
           startLocation: this.state.startLocation.formatted_address,
@@ -66,6 +68,8 @@ class App extends React.Component {
       .then(response => {
         const rawDataArray = response.data.query_data;
         let data = [];
+        console.log("response: ");
+        console.log(response);
 
         rawDataArray.forEach((datum) => {
           var timeString = Moment(datum.label).format('LT');
@@ -82,6 +86,10 @@ class App extends React.Component {
             data,
           };
         });
+
+        this.setState({waypoint0: response.data.waypoint0, waypoint1: response.data.waypoint1, route: response.data.query_data[0]["route"][0]});
+
+        console.log(this.state);
       })
       .catch(error => {
         console.log(error);
@@ -128,7 +136,8 @@ class App extends React.Component {
         { this.state.optimalTime && <div>
           <p>{`If you want to leave within ${this.tolerance.current.value} minutes of ${this.desiredTime.current.value}, you should head out at ${this.state.optimalTime} for a travel length of ${this.state.optimalTravelLength} minutes.`}</p>
         </div>}
-        <Mappy />
+
+        <Mappy route={this.state.route}/>
         {
           this.state.data && 
           <CanvasJSChart options={options}
