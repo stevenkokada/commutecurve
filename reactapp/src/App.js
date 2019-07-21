@@ -128,13 +128,14 @@ class App extends React.Component {
     return (
       <div>
         {this.state.error && <p>{this.state.error}</p>}
+        <div className="title"> Commute Curve </div>
         <form className="form">
-          Start Location: <GoogleSuggest
+          Start Location <GoogleSuggest
             passUpLocation={this.setStartLocation}
             initialValue={"345 Spear St, San Francisco, CA 94105, USA"}
           />
           <br/>
-          End Location: <GoogleSuggest
+          End Location <GoogleSuggest
             passUpLocation={this.setEndLocation}
             initialValue={"415 Mission St, San Francisco, CA 94105, USA"}
           />
