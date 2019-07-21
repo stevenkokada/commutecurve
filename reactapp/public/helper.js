@@ -80,11 +80,11 @@ var platform = new H.service.Platform({
 
 var defaultLayers = platform.createDefaultLayers();
 
-//Step 2: initialize a map - this map is centered over Berlin
+//Step 2: initialize a map
 var map = new H.Map(mapContainer,
   defaultLayers.vector.normal.map,{
-  center: {lat:52.5160, lng:13.3779},
-  zoom: 13,
+  center: {lat:37.773972, lng:-122.431297},
+  zoom: 12,
   pixelRatio: window.devicePixelRatio || 1
 });
 // add a resize listener to make sure that the map occupies the whole container

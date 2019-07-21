@@ -145,7 +145,7 @@ class App extends React.Component {
     }
     else {
       this.setState(() => { 
-        return {error: 'Please fill out all four fields!' }
+        return {error: 'Please fill out the start end end location!' }
       });
     }
 
