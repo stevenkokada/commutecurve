@@ -121,8 +121,8 @@ class App extends React.Component {
         }
       ],
       dataPointWidth: 30,
-      width: window.innerWidth * (2/3),
-      height: window.innerHeight / 2,
+      width: window.innerWidth * 0.5,
+      height: window.innerHeight * 0.4,
     }
 
     return (

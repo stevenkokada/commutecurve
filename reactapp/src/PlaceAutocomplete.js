@@ -13,12 +13,6 @@ export default class  extends React.Component {
             value: "",
         }
     }
-
-    componentDidMount() {
-        this.setState({value: this.props.initialValue});
-        console.log(this.props.initialValue);
-        console.log(this.state);
-    }
  
     handleInputChange = e => {
         this.setState({search: e.target.value, value: e.target.value})
@@ -27,6 +21,7 @@ export default class  extends React.Component {
     handleSelectSuggest = (geocodedPrediction, originalPrediction) => {
         this.setState({search: "", value: geocodedPrediction.formatted_address})
         this.props.passUpLocation(geocodedPrediction);
+        console.log(geocodedPrediction);
     }
     
     handleNoResult = () => {
