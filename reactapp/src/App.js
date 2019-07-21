@@ -14,7 +14,6 @@ class App extends React.Component {
     this.desiredTime = React.createRef();
     this.tolerance = React.createRef();
     this.state = {
-      isLoading: true,
       startLocation: undefined,
       endLocation: undefined,
       data: undefined,
@@ -28,12 +27,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const script = document.createElement("script");
-    script.src = "./requests.js";
-    script.onload = (function () {
-      this.setState({ isLoading: false })
-    }).bind(this)
-    document.getElementsByTagName('head')[0].appendChild(script);
   }
 
   setStartLocation = (startLocation) => {
@@ -109,7 +102,7 @@ class App extends React.Component {
   render() {
     const options = {
       title: {
-        text: ''
+        text: 'Commute Time'
       },
       colorSet: 'blue',
       data: [
@@ -122,9 +115,6 @@ class App extends React.Component {
       dataPointWidth: 30,
     }
 
-    if (this.state.isLoading) {
-      return (<div>Loading...</div>)
-    }
     return (
       <div>
         {this.state.error && <p>{this.state.error}</p>}
@@ -135,8 +125,8 @@ class App extends React.Component {
           End Location: <GoogleSuggest
             passUpLocation={this.setEndLocation}
           />
-          Desired Departure Time: <input type="time" ref={this.desiredTime} value="13:00" ></input>
-          Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance} value="123"></input>
+          Desired Departure Time: <input type="time" ref={this.desiredTime}></input>
+          Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance}></input>
           <button>Submit</button>
         </form>
 
