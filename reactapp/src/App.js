@@ -118,7 +118,7 @@ class App extends React.Component {
     return (
       <div>
         {this.state.error && <p>{this.state.error}</p>}
-        <form onSubmit={this.submitData}>
+        <form >
           Start Location: <GoogleSuggest
             passUpLocation={this.setStartLocation}
           />
@@ -127,7 +127,7 @@ class App extends React.Component {
           />
           Desired Departure Time: <input type="time" ref={this.desiredTime}></input>
           Tolerance (Minutes): <input type="number" min="0" ref={this.tolerance}></input>
-          <button>Submit</button>
+          <button onClick={this.submitData}>Submit</button>
         </form>
 
         <Mappy route={this.state.route}/>
